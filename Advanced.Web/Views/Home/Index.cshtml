@@ -1,7 +1,8 @@
-﻿@using Advanced.Web.Models
-@model Advanced.Web.Models.ViewModels.PeopleListViewModel
+﻿@model Advanced.Web.Models.ViewModels.PeopleListViewModel
 
 <h4 class="bg-primary text-white text-center p-2">People</h4>
+
+<component type="typeof(Advanced.Web.Blazor.PeopleList)" render-mode="Server" param-itemcount="5" param-selecttitle="@("Location")" />
 
 <table class="table table-sm table-bordered table-striped">
     <thead>
