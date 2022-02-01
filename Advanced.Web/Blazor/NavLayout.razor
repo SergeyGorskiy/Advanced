@@ -1,13 +1,32 @@
-﻿@inherits LayoutComponentBase
+﻿@using Advanced.Web.Services
+@inherits LayoutComponentBase
 
 @code 
 {
-    public Dictionary<string, string> NavLinks = new Dictionary<string, string>
+    [Inject]
+    public ToggleService Toggler { get; set; }
+
+    public Dictionary<string, string[]> NavLinks = new Dictionary<string, string[]>
     {
-        {"People", "/people" },
-        {"Departments", "/depts" },
-        {"Details", "/person" }
+        {"People", new string[] { "/people", "/" } },
+        {"Departments", new string[] { "/depts", "/departments" } },
+        {"Details", new string[] { "/person" }  }
     };
+
+    public Dictionary<string, MultiNavLink> Refs = new Dictionary<string, MultiNavLink>();
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Toggler.EnrolComponents(Refs.Values);
+        }
+    }
+
+    public void ToggleLinks()
+    {
+        Toggler.ToggleComponents();
+    }
 }
 
 <div class="container-fluid">
@@ -15,11 +34,11 @@
         <div class="col-3">
             @foreach (string key in NavLinks.Keys)
             {
-                <NavLink class="btn btn-outline-primary btn-block" 
-                         href="@NavLinks[key]"
-                         ActiveClass="btn-primary text-white"
-                         Match="NavLinkMatch.Prefix">@key</NavLink>
+                <MultiNavLink class="btn btn-outline-primary btn-block" href="@NavLinks[key]" 
+                              ActiveClass="btn-primary text-white"
+                              DisabledClasses="btn btn-dark text-light btn-block disabled" @ref="Refs[key]">@key</MultiNavLink>
             }
+            <button class="btn btn-secondary btn-block mt-5" @onclick="ToggleLinks">ToggleLinks</button>
         </div>
         <div class="col">@Body</div>
     </div>

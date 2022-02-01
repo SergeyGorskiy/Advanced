@@ -26,6 +26,7 @@ namespace Advanced.Web
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddRazorPages().AddRazorRuntimeCompilation();
             services.AddServerSideBlazor();
+            services.AddSingleton<Services.ToggleService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataContext context)

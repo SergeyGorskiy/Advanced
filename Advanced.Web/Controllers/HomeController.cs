@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Advanced.Web.EF;
 using Advanced.Web.Models.ViewModels;
+using Advanced.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,9 +11,12 @@ namespace Advanced.Web.Controllers
     {
         private readonly DataContext _context;
 
-        public HomeController(DataContext context)
+        private ToggleService _toggleService;
+
+        public HomeController(DataContext context, ToggleService toggleService)
         {
             _context = context;
+            _toggleService = toggleService;
         }
 
         public IActionResult Index([FromQuery] string selectedCity)
@@ -25,6 +29,11 @@ namespace Advanced.Web.Controllers
                 Cities = _context.Locations.Select(l => l.City).Distinct(),
                 SelectedCity = selectedCity
             });
+        }
+
+        public string Toggle()
+        {
+            return $"Enabled: {_toggleService.ToggleComponents()}";
         }
     }
 }
