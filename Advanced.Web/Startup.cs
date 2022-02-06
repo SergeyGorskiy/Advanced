@@ -1,4 +1,5 @@
 using Advanced.Web.EF;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -41,6 +42,11 @@ namespace Advanced.Web
                 opts.User.RequireUniqueEmail = true;
                 opts.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyz";
             });
+            //services.Configure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, opts =>
+            //{
+            //    opts.LoginPath = "/Authenticate";
+            //    opts.AccessDeniedPath = "/NonAllowed";
+            //});
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DataContext context)
@@ -51,6 +57,8 @@ namespace Advanced.Web
             }
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute("controllers", "controllers/{controller=Home}/{action=Index}/{id?}");
@@ -61,6 +69,8 @@ namespace Advanced.Web
             });
             
             SeedData.SeedDatabase(context);
+
+            IdentitySeedData.CreateAdminAccount(app.ApplicationServices, Configuration);
         }
     }
 }

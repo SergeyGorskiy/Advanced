@@ -1,6 +1,15 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Authorization
+@model HostModel
+
 @{
     Layout = null;
+}
+
+@functions
+{
+    [Authorize]
+    public class HostModel : PageModel { }
 }
 
 <html>

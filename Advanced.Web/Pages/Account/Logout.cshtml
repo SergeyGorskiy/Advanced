@@ -1,0 +1,26 @@
+﻿@page
+@model LogoutModel
+
+@functions
+{
+    public class LogoutModel : PageModel
+    {
+        private SignInManager<IdentityUser> _signInManager;
+
+        public LogoutModel(SignInManager<IdentityUser> signInManager)
+        {
+            _signInManager = signInManager;
+        }
+
+        public async Task OnGetAsync()
+        {
+            await _signInManager.SignOutAsync();
+        }
+    }
+}
+
+<div class="bg-primary text-center text-white p-2">Log Out</div>
+<div class="m-2">
+    <h6>You are logged out</h6>
+    <a asp-page="Login" class="btn btn-secondary">OK</a>
+</div>
